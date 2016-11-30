@@ -17,8 +17,8 @@ import * as ACTION from './constants';
 })
 export class AppComponent {
     counter$: Observable<number>;
-    constructor(private store:Store<any>){
-        this.counter$ = this.store.select<number>('counter');
+    constructor(private store:Store<number>){
+        this.counter$ = this.store.select('counter');
     }
     
     increment(){
