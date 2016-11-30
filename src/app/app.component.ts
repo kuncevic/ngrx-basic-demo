@@ -1,10 +1,31 @@
-import { Component } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as ACTION from './constants';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `
+    <ngrx-store-log-monitor toggleCommand="ctrl-h" positionCommand="ctrl-m"></ngrx-store-log-monitor>
+    <div class="content">
+        <button (click)="increment()">Increment</button>
+        <button (click)="decrement()">Decrement</button>
+        <div></div>
+        {{counter$ | async}} 
+    </div>`,  
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  title = 'app works!';
+    counter$: Observable<number>;
+    constructor(private store:Store<any>){
+        this.counter$ = this.store.select<number>('counter');
+    }
+    
+    increment(){
+      this.store.dispatch({type: ACTION.INCREMENT});
+    }
+    
+    decrement(){
+      this.store.dispatch({type: ACTION.DECREMENT});
+    }
 }
